@@ -39,18 +39,18 @@ def preprocessor(data):
     # Try 12-hour format with AM/PM indicator first, then 24-hour format
     try:
         df = pd.DataFrame(
-            {"user_message": massage, "date": pd.to_datetime(converted_dates, format='%d/%m/%Y, %I:%M %p - ')})
+            {"user_message": massage, "date": pd.to_datetime(converted_dates, format='%m/%d/%Y, %I:%M %p - ')})
     except ValueError:
         try:
             df = pd.DataFrame(
-                {"user_message": massage, "date": pd.to_datetime(converted_dates, format='%d/%m/%Y, %H:%M - ')})
+                {"user_message": massage, "date": pd.to_datetime(converted_dates, format='%m/%d/%Y, %H:%M - ')})
         except ValueError:
             try:
                 df = pd.DataFrame(
-                    {"user_message": massage, "date": pd.to_datetime(converted_dates, format='%m/%d/%Y, %I:%M %p - ')})
+                    {"user_message": massage, "date": pd.to_datetime(converted_dates, format='%d/%m/%Y, %I:%M %p - ')})
             except ValueError:
                 df = pd.DataFrame(
-                    {"user_message": massage, "date": pd.to_datetime(converted_dates, format="%m/%d/%Y, %H:%M - ")})
+                    {"user_message": massage, "date": pd.to_datetime(converted_dates, format="%d/%m/%Y, %H:%M - ")})
     user = []
     massage = []
     for message in df["user_message"]:
