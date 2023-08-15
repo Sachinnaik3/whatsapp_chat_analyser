@@ -78,6 +78,7 @@ if Upload_file is not None:
         st.pyplot(fig)
 
         st.title("Most Busy users")
+
         if selected_user == "Overall":
             x, new_df = helper.fetch_busy_user(df)
             fig, ax = plt.subplots()
