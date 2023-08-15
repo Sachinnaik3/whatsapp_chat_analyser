@@ -31,7 +31,7 @@ def preprocessor(data):
         try:
             df = pd.DataFrame({"user_message": massage, "date": pd.to_datetime(converted_dates, format='%m/%d/%Y, %I:%M %p')})
         except ValueError:
-            df = pd.DataFrame({"user_message": massage, "date": pd.to_datetime(converted_dates, format='%d/%m/%Y, %H:%M - ')})
+            df = pd.DataFrame({"user_message": massage, "date": pd.to_datetime(converted_dates, format='%d/%m/%Y, %I:%M %p ')})
             
     user = []
     massage = []
