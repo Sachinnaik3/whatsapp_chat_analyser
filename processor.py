@@ -14,7 +14,7 @@ def preprocessor(data):
             if len(date_parts) == 3:
                 year = date_parts[2]
                 if len(year) == 2:
-                    year = '20' + year if int(year) > 20 else '19' + year
+                    year = '20' + year if int(year) > 20 else '20' + year
                     date_parts[2] = year
                     new_date = '/'.join(date_parts) + ', ' + time_part
                     return new_date
