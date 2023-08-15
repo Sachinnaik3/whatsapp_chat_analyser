@@ -6,12 +6,10 @@ def preprocessor(data):
     pattern = '\d{1,2}/\d{1,2}/\d{2,4},\s\d{1,2}:\d{2}\s-\s'
     pattern_2 = r'\d{1,2}/\d{1,2}/\d{2,4},\s\d{1,2}:\d{2}\s-\s'
 
-    try:
-        massage = re.split(pattern, data)[1:]
-        dates = re.findall(pattern, data)
-    except ValueError:
-        massage = re.split(pattern_2, data)[1:]
-        dates = re.findall(pattern_2, data)
+    
+   
+    massage = re.split(pattern_2, data)[1:]
+    dates = re.findall(pattern_2, data)
         
     def convert_year(date_string):
         parts = date_string.split(', ')
@@ -29,7 +27,7 @@ def preprocessor(data):
 
 # Convert the list of date strings to pandas datetime format
     converted_dates = [convert_year(date) for date in dates]
-     try:
+    try:
         df = pd.DataFrame({"user_message": massage, "date": pd.to_datetime(converted_dates, format='%d/%m/%Y, %I:%M %p - ')})
     except ValueError:
         df = pd.DataFrame({"user_message": massage, "date": pd.to_datetime(converted_dates, format='%d/%m/%Y, %H:%M - ')})
