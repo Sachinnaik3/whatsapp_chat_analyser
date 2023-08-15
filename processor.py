@@ -28,9 +28,9 @@ def preprocessor(data):
 # Convert the list of date strings to pandas datetime format
     converted_dates = [convert_year(date) for date in dates]
     try:
-        df = pd.DataFrame({"user_message": massage, "date": pd.to_datetime(converted_dates, format='%d/%m/%Y, %I:%M %p - ')})
-    except ValueError:
         df = pd.DataFrame({"user_message": massage, "date": pd.to_datetime(converted_dates, format='%d/%m/%Y, %H:%M - ')})
+    except ValueError:
+        df = pd.DataFrame({"user_message": massage, "date": pd.to_datetime(converted_dates, format='%m/%d/%Y, %H:%M - ')})
         
     user = []
     massage = []
