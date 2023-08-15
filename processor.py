@@ -4,9 +4,21 @@ import pandas as pd
 
 
 def preprocessor(data):
-    pattern = r'\d{1,2}/\d{1,2}/\d{2,4},\s\d{1,2}:\d{2}\s[APapMm]{2}\s-\s'
+    pattern = r'\d{1,2}/\d{1,2}/\d{2,4},\s\d{1,2}:\d{2}\s-\s'
+    pattern2 = r'\d{1,2}/\d{1,2}/\d{2,4},\s\d{1,2}:\d{2}\s[APapMm]{2}\s-\s'
+    pattern3 ='\d{1,2}/\d{1,2}/\d{2,4},\s\d{1,2}:\d{2}\s-\s'
+
     massage = re.split(pattern, data)[1:]
+    if len(massage) == 0:
+        massage = re.split(pattern2, data)[1:]
+    if len(massage) == 0:
+        massage = re.split(pattern3, data)[1:]
+        
     dates = re.findall(pattern, data)
+    if len(dates) == 0:
+        dates = re.findall(pattern2, data)
+    if len(dates) == 0:
+        dates = re.findall(pattern3, data)
 
     def convert_year(date_string):
         parts = date_string.split(', ')
@@ -21,20 +33,21 @@ def preprocessor(data):
                     new_date = '/'.join(date_parts) + ', ' + time_part
                     return new_date
         return date_string
+
     # Convert the list of date strings to pandas datetime format
     converted_dates = [convert_year(date) for date in dates]
     
-    # Try both 12-hour and 24-hour formats for parsing the dates
+    # Try 12-hour format with AM/PM indicator first, then 24-hour format
     try:
         df = pd.DataFrame({"user_message": massage, "date": pd.to_datetime(converted_dates, format='%d/%m/%Y, %I:%M %p - ')})
     except ValueError:
         try:
-            df = pd.DataFrame({"user_message": massage, "date": pd.to_datetime(converted_dates, format='%d/%m/%Y, %I:%M %p')})
+            df = pd.DataFrame({"user_message": massage, "date": pd.to_datetime(converted_dates, format='%d/%m/%Y, %H:%M - ')})
         except ValueError:
             try:
                 df = pd.DataFrame({"user_message": massage, "date": pd.to_datetime(converted_dates, format='%m/%d/%Y, %I:%M %p - ')})
             except ValueError:
-                df = pd.DataFrame({"user_message": massage, "date": pd.to_datetime(converted_dates, format='%m/%d/%Y, %H:%M - ')})            
+                df = pd.DataFrame({"user_message": massage, "date": pd.to_datetime(converted_dates, format="%m/%d/%Y, %H:%M - ")})            
     user = []
     massage = []
     for message in df["user_message"]:
