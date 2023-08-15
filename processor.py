@@ -26,12 +26,13 @@ def preprocessor(data):
     
     # Try both 12-hour and 24-hour formats for parsing the dates
     try:
-        df = pd.DataFrame({"user_message": massage, "date": pd.to_datetime(converted_dates, format='%m/%d/%Y, %I:%M %p - ')})
+        df = pd.DataFrame({"user_message": massage, "date": pd.to_datetime(converted_dates, format='%d/%m/%Y, %I:%M %p - ')})
     except ValueError:
         try:
-            df = pd.DataFrame({"user_message": massage, "date": pd.to_datetime(converted_dates, format='%m/%d/%Y, %I:%M %p')})
+            df = pd.DataFrame({"user_message": massage, "date": pd.to_datetime(converted_dates, format='%d/%m/%Y, %I:%M %p')})
         except ValueError:
             df = pd.DataFrame({"user_message": massage, "date": pd.to_datetime(converted_dates, format='%d/%m/%Y, %I:%M %p ')})
+            
             
     user = []
     massage = []
