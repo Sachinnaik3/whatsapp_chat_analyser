@@ -2,26 +2,26 @@ import re
 import pandas as pd
 
 
+
 def preprocessor(data):
     pattern = r'\d{1,2}/\d{1,2}/\d{2,4},\s\d{1,2}:\d{2}\s[APapMm]{2}\s-\s'
     massage = re.split(pattern, data)[1:]
     dates = re.findall(pattern, data)
 
     def convert_year(date_string):
-    parts = date_string.split(', ')
-    if len(parts) == 2:
-        date_part, time_part = parts
-        date_parts = date_part.split('/')
-        if len(date_parts) == 3:
-            month, day, year = map(int, date_parts)
-            if year < 100:
-                if year > 20:
-                    year += 1900
-                else:
-                    year += 2000
-            new_date = f'{month}/{day}/{year}, {time_part}'
-            return new_date
+        parts = date_string.split(', ')
+        if len(parts) == 2:
+            date_part, time_part = parts
+            date_parts = date_part.split('/')
+            if len(date_parts) == 3:
+                year = date_parts[2]
+                if len(year) == 2:
+                    year = '20' + year if int(year) > 20 else '20' + year
+                    date_parts[2] = year
+                    new_date = '/'.join(date_parts) + ', ' + time_part
+                    return new_date
         return date_string
+
     # Convert the list of date strings to pandas datetime format
     converted_dates = [convert_year(date) for date in dates]
     
@@ -35,9 +35,7 @@ def preprocessor(data):
             try:
                 df = pd.DataFrame({"user_message": massage, "date": pd.to_datetime(converted_dates, format='%m/%d/%Y, %I:%M %p - ')})
             except ValueError:
-                df = pd.DataFrame({"user_message": massage, "date": pd.to_datetime(converted_dates, format='%m/%d/%Y, %H:%M - ')})
-    return df
-            
+                df = pd.DataFrame({"user_message": massage, "date": pd.to_datetime(converted_dates, format='%m/%d/%Y, %H:%M - ')})            
     user = []
     massage = []
     for message in df["user_message"]:
