@@ -29,7 +29,7 @@ def preprocessor(data):
         df = pd.DataFrame({"user_message": massage, "date": pd.to_datetime(converted_dates, format='%m/%d/%Y, %I:%M %p - ')})
     except ValueError:
         try:
-            df = pd.DataFrame({"user_message": massage, "date": pd.to_datetime(converted_dates, format='%m/%m\d/%Y, %I:%M %p')})
+            df = pd.DataFrame({"user_message": massage, "date": pd.to_datetime(converted_dates, format='%m/%d/%Y, %I:%M %p')})
         except ValueError:
             df = pd.DataFrame({"user_message": massage, "date": pd.to_datetime(converted_dates, format='%d/%m/%Y, %H:%M - ')})
             
