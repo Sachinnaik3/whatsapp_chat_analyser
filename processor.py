@@ -6,8 +6,24 @@ def preprocessor(data):
     pattern = '\d{1,2}/\d{1,2}/\d{2,4},\s\d{1,2}:\d{2}\s-\s'
     massage = re.split(pattern, data)[1:]
     dates = re.findall(pattern, data)
-    df = pd.DataFrame({"user_message": massage, "date": pd.to_datetime(dates, format="%d/%m/%Y, %H:%M - ")})
+    def convert_year(date_string):
+        parts = date_string.split(', ')
+        if len(parts) == 2:
+            date_part, time_part = parts
+            date_parts = date_part.split('/')
+            if len(date_parts) == 3:
+                year = date_parts[2]
+                if len(year) == 2:
+                    year = '20' + year if int(year) > 20 else '19' + year
+                    date_parts[2] = year
+                    new_date = '/'.join(date_parts) + ', ' + time_part
+                    return new_date
+        return date_string
 
+# Convert the list of date strings to pandas datetime format
+    converted_dates = [convert_year(date) for date in dates]
+    df = pd.DataFrame({"user_message": massage, "date": pd.to_datetime(converted_dates, format='%m/%d/%Y, %H:%M - ')})
+    
     user = []
     massage = []
     for message in df["user_message"]:
