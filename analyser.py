@@ -3,7 +3,7 @@ import processor, helper
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-st.sidebar.title("Whatsapp Chat Analyzer")
+st.sidebar.title("Whatsapp Chat Analyzer Sachin")
 
 Upload_file = st.sidebar.file_uploader("Chose a file")
 if Upload_file is not None:
